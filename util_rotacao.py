@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import cv2
 import pickle
 import numpy as np
-
+import sys
 
 def read(dir = 'train.truth.csv'):
     arquivos = {}
@@ -28,29 +28,38 @@ def reading_train(dir,arquivos):
         except Exception:
             pass
     return train_data,train_label
-def encoding_pickle(file,context):
-    with open(file, 'rb') as fo:
-        # dict = pickle.load(fo, encoding='bytes')
-        pickle.dump(fo,context, encoding='bytes')
-'''
-arquivos = read()
-train_data,train_label = reading_train('train',arquivos)
-train_data,train_label = np.array(train_data),np.array(train_label)
-pickle.dump( [train_data, train_label], open('rotfaces', "wb"))
-print("create data")
-'''
 
-img = cv2.imread('test/90-890_1981-06-07_2009.jpg')
-shape = img.shape
+def reading_test(dir = './test'):
+    import os
+    arquivos = [os.path.join(dir, nome) for nome in os.listdir(dir)]
+    demiliter = ('/' if arquivos[0][len(dir)]=='/' else '\\')
 
-rotacao = cv2.getRotationMatrix2D((32,32), 270, 1)
-rotacionado = cv2.warpAffine(img, rotacao, (shape[0], shape[1]))
-print(type(rotacionado))
-cv2.imshow("45 graus redimensionado", rotacionado)
+    arquivos = [caminho.split(demiliter)[-1:][0] for caminho in arquivos ]
 
-cv2.waitKey(0)
-# cv2.imshow("Espelhado horizontalmente", img)
-# inverter = cv2.flip(img, ())
-# cv2.imshow("Espelhado horizontalmente", inverter)
+    test_data = []
+    for fn in arquivos:
+        dir_img = dir + '/' + fn
+        test_data.append(cv2.imread(dir_img))
+    return test_data.copy(),arquivos
+def reading_test(dir = './test'):
+    import os
+    arquivos = [os.path.join(dir, nome) for nome in os.listdir(dir)]
+    demiliter = ('/' if arquivos[0][len(dir)]=='/' else '\\')
 
-# cv2.waitKey(0)
+    arquivos = [caminho.split(demiliter)[-1:][0] for caminho in arquivos ]
+
+    test_data = []
+    for fn in arquivos:
+        dir_img = dir + '/' + fn
+        test_data.append(cv2.imread(dir_img))
+    return test_data.copy(),arquivos
+
+if (__name__ == '__main__'):
+    train,pickle_train = sys.argv[1],sys.argv[2]
+    arquivos = read(train)
+    train_data,train_label = reading_train('train',arquivos)
+    train_data,train_label = np.array(train_data),np.array(train_label)
+    pickle.dump( (train_data, train_label), open(pickle_train, "wb"))
+    print("create data")
+
+# python util_rotacao.py train.truth.csv rotfaces
