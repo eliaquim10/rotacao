@@ -46,13 +46,17 @@ def reading_test(dir = './test'):
     arquivos = [os.path.join(dir, nome) for nome in os.listdir(dir)]
     demiliter = ('/' if arquivos[0][len(dir)]=='/' else '\\')
 
-    arquivos = [caminho.split(demiliter)[-1:][0] for caminho in arquivos ]
+    arquivos = [caminho.split(demiliter)[1] for caminho in arquivos ]
 
-    test_data = []
+    test_data = {}
     for fn in arquivos:
         dir_img = dir + '/' + fn
-        test_data.append(cv2.imread(dir_img))
-    return test_data.copy(),arquivos
+        test_data[fn] = cv2.imread(dir_img)
+    return test_data
+def keys(data):
+    return list(data.keys())
+def values(data):
+    return list(data.values())
 
 if (__name__ == '__main__'):
     train,pickle_train = sys.argv[1],sys.argv[2]

@@ -2,7 +2,7 @@ import pickle
 import tensorflow as tf
 import numpy as np
 
-from util_rotacao import reading_test
+from util_rotacao import reading_test,keys,values
 import sys
 
 def load_cfar10_batch(cifar10_dataset_folder_path,data_batch, batch_id):
@@ -71,14 +71,12 @@ def train_test(train_data,train_label,test_data):
         tf.keras.layers.Dense(256, activation=tf.nn.relu),
         tf.keras.layers.Dense(4, activation=tf.nn.softmax)])
 
-# model.summary()
+    # model.summary()
 
     model.compile(optimizer=tf.train.AdamOptimizer(),
                   loss='categorical_crossentropy',
                   # loss_weights=[0.01],
                   metrics=['accuracy'])
-
-
 
     model.fit(train_data,
                         train_label,
@@ -92,11 +90,11 @@ def train_test(train_data,train_label,test_data):
 if (__name__ == '__main__'):
     train,test_name,test_predition = sys.argv[1],sys.argv[2],sys.argv[3]
     train_data, train_label = load_rot(train, '')
-    test_data,arq = reading_test(test_name)
+    test_data = reading_test(test_name)
 
     train_data, train_label = ajuste(train_data, train_label)
-    test_data = np.array([feature/255.0 for feature in test_data])
+    test_data = np.array([feature/255.0 for feature in values(test_data)])
     labels = train_test(train_data,train_label,test_data)
-    write_predition(arq,labels,test_predition)
+    write_predition(keys(test_data),labels,test_predition)
 
 # python CIFAR.py rotfaces test truth.csv

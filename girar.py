@@ -1,44 +1,35 @@
 import cv2
 import sys
-from util_rotacao import reading_test,read
+from util_rotacao import reading_test,read,keys
 def rotacao_img(img,label):
-    if(label==1):
+    shape = img.shape
+    dimension = tuple(shape[:2])
+    ponto = (dimension[0]/2,dimension[1]/2)
+    scale = 1
+    angulo = ([0,-90,90,180][label])
+    if(label==0):
         return img
-    if(label==2):
-        shape = img.shape
-        rotacao = cv2.getRotationMatrix2D((32,32), 90, 1)
-        rotacionado = cv2.warpAffine(img, rotacao, (shape[0], shape[1]))
-        return rotacionado
-    if(label==3):
-        shape = img.shape
-        rotacao = cv2.getRotationMatrix2D((32,32), -90, 1)
-        rotacionado = cv2.warpAffine(img, rotacao, (shape[0], shape[1]))
-        return rotacionado
-    if(label==4):
-        shape = img.shape
-        rotacao = cv2.getRotationMatrix2D((32,32), 180, 0)
-        rotacionado = cv2.warpAffine(img, rotacao, (shape[0], shape[1]))
-        return rotacionado
-def rotation_predition(test_data,arq,predictions):
+    rotacao = cv2.getRotationMatrix2D(ponto, angulo, scale)
+    return cv2.warpAffine(img, rotacao, dimension)
+def rotation_predition(test_data,predictions):
     correct_img = []
-    value = list(predictions.values())
-    for i in range(len(test_data)):
-        img = rotacao_img(test_data[i],value[i])
+    for file, data in test_data.items():
+        img = rotacao_img(data,predictions[file])
         correct_img.append(img)
     return correct_img
 
 def write_predition_img(arq,imgs,path):
     len_labels = len(imgs)
     i=0
-    while(len_labels>i):
+    while(i<len_labels):
         cv2.imwrite(path+ '/'+ arq[i], imgs[i])
         i+=1
 if (__name__ == '__main__'):
     file_imgs,pred_name,save_predition = sys.argv[1],sys.argv[2],sys.argv[3]
-    test_data,arq = reading_test(file_imgs)
+    test_data = reading_test(file_imgs)
     predictions = read(pred_name)
-    imgs = rotation_predition(test_data,arq,predictions)
-    write_predition_img(arq,imgs,save_predition)
+    imgs = rotation_predition(test_data,predictions)
+    write_predition_img(keys(test_data),imgs,save_predition)
 
 
 # python girar.py test truth.csv predition
