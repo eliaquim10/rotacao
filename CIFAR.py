@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
+
 from util_rotacao import reading_test
 import sys
 
@@ -99,7 +99,6 @@ if (__name__ == '__main__'):
     train_data, train_label = ajuste(train_data, train_label)
     test_data = np.array([feature/255.0 for feature in test_data])
     labels = train_test(train_data,train_label,test_data)
-    print(labels[0])
     write_predition(arq,labels,test_predition)
 
 # python CIFAR.py rotfaces test truth.csv

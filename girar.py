@@ -1,5 +1,6 @@
 import cv2
 import sys
+import matplotlib.pyplot as plt
 from util_rotacao import reading_test,read
 def rotacao_img(img,label):
     if(label==1):
@@ -16,15 +17,12 @@ def rotacao_img(img,label):
         return rotacionado
     if(label==4):
         shape = img.shape
-        rotacao = cv2.getRotationMatrix2D((32,32), 180, 1)
+        rotacao = cv2.getRotationMatrix2D((32,32), 180, 0)
         rotacionado = cv2.warpAffine(img, rotacao, (shape[0], shape[1]))
         return rotacionado
 def rotation_predition(test_data,arq,predictions):
     correct_img = []
     value = list(predictions.values())
-    def labels_class(i):
-        labels = {'upright':0, 'rotated_left':1, 'rotated_right':2, 'upside_down':3}
-        return labels[i]
     for i in range(len(test_data)):
         img = rotacao_img(test_data[i],value[i])
         correct_img.append(img)
