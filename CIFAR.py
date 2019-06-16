@@ -1,8 +1,6 @@
 import pickle
 import tensorflow as tf
-from tensorflow import keras
 import numpy as np
-import cv2
 
 from util_rotacao import reading_test
 import sys

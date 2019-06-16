@@ -1,6 +1,5 @@
 import cv2
 import sys
-import matplotlib.pyplot as plt
 from util_rotacao import reading_test,read
 def rotacao_img(img,label):
     if(label==1):

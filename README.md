@@ -4,4 +4,9 @@ I created a arquive sh, run.sh. The sequence is unpack of the train and test, an
 link of prediction is: https://www.dropbox.com/s/cbh0qjg1y2ivmuq/predition.zip?dl=0
 
 task:
-https://gist.github.com/csaftoiu/9fccaf47fd8f96cd378afd8fdd0d63c1 
+https://gist.github.com/csaftoiu/9fccaf47fd8f96cd378afd8fdd0d63c1
+
+packages:
+conda install pickle
+
+conda install tensorflow 
