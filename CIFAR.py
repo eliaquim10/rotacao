@@ -75,7 +75,7 @@ def train_test(train_data,train_label,test_data):
 
     model.compile(optimizer=tf.train.AdamOptimizer(),
                   loss='categorical_crossentropy',
-                  # loss_weights=[0.01],
+                  loss_weights=[0.01],
                   metrics=['accuracy'])
 
     model.fit(train_data,
@@ -93,8 +93,10 @@ if (__name__ == '__main__'):
     test_data = reading_test(test_name)
 
     train_data, train_label = ajuste(train_data, train_label)
+    arq = keys(test_data)
     test_data = np.array([feature/255.0 for feature in values(test_data)])
     labels = train_test(train_data,train_label,test_data)
-    write_predition(keys(test_data),labels,test_predition)
+
+    write_predition(arq,labels,test_predition)
 
 # python CIFAR.py rotfaces test truth.csv
